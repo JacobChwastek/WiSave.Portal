@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BB87280-9CC1-4ADD-A188-A8AFE3B254E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiSave.Portal.WebApi", "WiSave.Portal.WebApi\WiSave.Portal.WebApi.csproj", "{31E1D703-FAE6-4920-BBF7-F85178200FAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63459CBB-48A4-4821-97E2-445914938B18}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+		postgres-init.sql = postgres-init.sql
+		.env = .env
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiSave.Core", "WiSave.Core\WiSave.Core.csproj", "{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31E1D703-FAE6-4920-BBF7-F85178200FAF} = {2BB87280-9CC1-4ADD-A188-A8AFE3B254E7}
+		{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83} = {2BB87280-9CC1-4ADD-A188-A8AFE3B254E7}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31E1D703-FAE6-4920-BBF7-F85178200FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E1D703-FAE6-4920-BBF7-F85178200FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E1D703-FAE6-4920-BBF7-F85178200FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E1D703-FAE6-4920-BBF7-F85178200FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD23BC2-6D91-413B-9FA8-BD862FF7EE83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

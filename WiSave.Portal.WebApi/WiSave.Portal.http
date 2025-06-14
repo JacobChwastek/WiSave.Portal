@@ -1,0 +1,6 @@
+@WiSave.Portal_HostAddress = http://localhost:5208
+
+GET {{WiSave.Portal_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

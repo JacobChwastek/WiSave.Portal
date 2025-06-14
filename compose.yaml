@@ -1,0 +1,53 @@
+﻿services:
+  wisave-portal:
+    image: wisave.portal
+    build:
+      context: .
+      dockerfile: WiSave.Portal.WebApi/Dockerfile
+    ports:
+      - "5002:5002"
+      - "5003:5003"
+    volumes:
+      - ./https:/https:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5003;http://+:5002
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_Kestrel__Certificates__Default__Password}
+    networks:
+      - portal
+
+  wisave-portal-db:
+    image: postgres:15
+    container_name: wisave-portal-db
+    restart: unless-stopped
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    environment:
+      - PGPORT=5433
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=postgres
+      - POSTGRES_MULTIPLE_DATABASES=wisave_portal
+    volumes:
+      - wisave_portal_db_data:/var/lib/postgresql/data
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql:ro
+    networks:
+      - portal
+      - infrastructure
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d wisave_portal"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  wisave_portal_db_data:
+    name: wisave_portal_db_data
+
+networks:
+  infrastructure:
+    external: true
+  portal:
