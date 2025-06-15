@@ -35,6 +35,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, RoleManager<I
 
         return await GenerateAuthResponse(user);
     }
+    
 
     public async Task<AuthResponse?> LoginAsync(LoginRequest request)
     {
@@ -118,6 +119,17 @@ public class AuthService(UserManager<ApplicationUser> userManager, RoleManager<I
             user.LastLoginAt,
             roles
         );
+    }
+
+    public async Task<bool> LogoutAsync(string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        if (user == null)
+            return false;
+        
+        await userManager.UpdateSecurityStampAsync(user);
+    
+        return true;
     }
 
     public async Task<IEnumerable<UserDto>> GetAllUsersAsync()

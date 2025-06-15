@@ -44,8 +44,31 @@ public static class AuthEndpoints
             .RequireAuthorization()
             .Produces<UserDto>()
             .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized);
+        
+        auth.MapPost("/logout", LogoutAsync)
+            .WithName("Logout")
+            .WithSummary("Logout user and invalidate tokens")
+            .RequireAuthorization()
+            .Produces(StatusCodes.Status200OK)
+            .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized);
     }
 
+ 
+    private static async Task<IResult> LogoutAsync([FromServices] IAuthService authService, ClaimsPrincipal user)
+    {
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+            return Results.Unauthorized();
+
+        var result = await authService.LogoutAsync(userId);
+        return result
+            ? Results.Ok(new { Message = "Logged out successfully" })
+            : Results.BadRequest(new ProblemDetails
+            {
+                Title = "Logout failed",
+                Detail = "Unable to logout user."
+            });
+    }
     private static async Task<IResult> RegisterAsync([FromBody] RegisterRequest request, [FromServices] IAuthService authService)
     {
         var result = await authService.RegisterAsync(request);

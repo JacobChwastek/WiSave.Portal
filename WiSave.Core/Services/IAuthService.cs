@@ -13,6 +13,8 @@ public interface IAuthService
     Task<bool> AssignRoleAsync(string userId, string roleName);
     Task<bool> RemoveRoleAsync(string userId, string roleName);
     Task<UserDto?> GetUserByIdAsync(string userId);
+    Task<bool> LogoutAsync(string userId);
+
     Task<IEnumerable<UserDto>> GetAllUsersAsync();
     Task<bool> DeactivateUserAsync(string userId);
     Task<bool> ActivateUserAsync(string userId);

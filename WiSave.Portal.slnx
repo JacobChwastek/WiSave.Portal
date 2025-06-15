@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="compose.yaml" />
+    <File Path="postgres-init.sql" />
+    <File Path=".env" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="WiSave.Core\WiSave.Core.csproj" Type="Classic C#" />
+    <Project Path="WiSave.Portal.WebApi\WiSave.Portal.WebApi.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>
