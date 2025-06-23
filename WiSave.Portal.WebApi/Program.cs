@@ -1,12 +1,27 @@
 using Microsoft.OpenApi.Models;
 using WiSave.Core;
 using WiSave.Portal.WebApi.Endpoints;
+using WiSave.Portal.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpClient("yarp")
+        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = 
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        });
+}
+
 builder.Services
     .AddOpenApi()
-    .AddCore(builder.Configuration)
+    .AddHttpLogging()
+    .AddCore(builder.Configuration, builder.Environment)
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
     {
@@ -54,7 +69,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-
 app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
@@ -62,16 +76,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("AllowAll");
+    
 }
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHttpLogging();
+app.UseMiddleware<UserContextMiddleware>();
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
+app.MapHealthEndpoints();
 
-app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))
-    .WithName("HealthCheck")
-    .WithTags("Health");
+app.MapReverseProxy();
 
 app.Run();

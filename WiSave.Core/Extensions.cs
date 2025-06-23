@@ -1,5 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,10 +15,15 @@ namespace WiSave.Core;
 
 public static class Extensions
 {
-    public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment enviroment)
     {
+        services.AddDataProtection()
+            .SetApplicationName("WiSave.Portal")
+            .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
+
+
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Portal")));
-        
+
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 // Password settings
@@ -32,7 +39,7 @@ public static class Extensions
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-        
+
         // JWT Authentication
         var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
         services.AddAuthentication(options =>
@@ -59,9 +66,9 @@ public static class Extensions
             .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"))
             .AddPolicy("ModeratorOrAdmin", policy => policy.RequireRole("Moderator", "Admin"))
             .AddPolicy("UserOrAbove", policy => policy.RequireRole("User", "Moderator", "Admin"));
-        
+
         services.AddScoped<IAuthService, AuthService>();
-        
+
         return services;
     }
 }

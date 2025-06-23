@@ -12,10 +12,11 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5003;http://+:5002
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/portal-api.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_Kestrel__Certificates__Default__Password}
     networks:
       - portal
+      - wisave-backend
 
   wisave-portal-db:
     image: postgres:15
@@ -49,5 +50,7 @@ volumes:
 
 networks:
   infrastructure:
+    external: true
+  wisave-backend:
     external: true
   portal:
